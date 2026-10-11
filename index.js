@@ -1,29 +1,3 @@
-function calculateTax(amount) {
-  return amount * 0.10;
-}
-
-function convertToUpperCase(text) {
-  return text.toUpperCase();
-}
-
-function findMaximum(a, b) {
-  return Math.max(a, b);
-}
-
-function isPalindrome(text) {
-  const lowerText = text.toLowerCase();
-  const reversed = lowerText.split("").reverse().join("");
-
-  return lowerText === reversed;
-}
-
-function calculateDiscountedPrice(originalPrice, discountPercentage) {
-  const discountAmount =
-    originalPrice * (discountPercentage / 100);
-
-  return originalPrice - discountAmount;
-}
-
 function createLoginTracker(userInfo) {
   const maxAttempts = 3;
   let failedAttempts = 0;
@@ -31,11 +5,13 @@ function createLoginTracker(userInfo) {
 
   const login = (username, password) => {
     if (accountLocked) {
-      return "Account locked";
+      return "Account locked due to too many failed login attempts";
     }
 
-    const isValidUsername = username === userInfo.username;
-    const isValidPassword = password === userInfo.password;
+    const storedUsername = userInfo && userInfo.username;
+    const storedPassword = userInfo && userInfo.password;
+    const isValidUsername = username === storedUsername;
+    const isValidPassword = password === storedPassword;
 
     if (isValidUsername && isValidPassword) {
       failedAttempts = 0;
@@ -47,20 +23,15 @@ function createLoginTracker(userInfo) {
 
     if (failedAttempts >= maxAttempts) {
       accountLocked = true;
-      return "Account locked";
+      return "Account locked due to too many failed login attempts";
     }
 
-    return `Invalid credentials. ${maxAttempts - failedAttempts} attempts remaining`;
+    return `Attempt ${failedAttempts}: Login failed`;
   };
 
   return login;
 }
 
 module.exports = {
-  calculateTax,
-  convertToUpperCase,
-  findMaximum,
-  isPalindrome,
-  calculateDiscountedPrice,
-  createLoginTracker
+  createLoginTracker,
 };
