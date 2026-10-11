@@ -24,10 +24,43 @@ function calculateDiscountedPrice(originalPrice, discountPercentage) {
   return originalPrice - discountAmount;
 }
 
+function createLoginTracker(userInfo) {
+  const maxAttempts = 3;
+  let failedAttempts = 0;
+  let accountLocked = false;
+
+  const login = (username, password) => {
+    if (accountLocked) {
+      return "Account locked";
+    }
+
+    const isValidUsername = username === userInfo.username;
+    const isValidPassword = password === userInfo.password;
+
+    if (isValidUsername && isValidPassword) {
+      failedAttempts = 0;
+      accountLocked = false;
+      return "Login successful";
+    }
+
+    failedAttempts += 1;
+
+    if (failedAttempts >= maxAttempts) {
+      accountLocked = true;
+      return "Account locked";
+    }
+
+    return `Invalid credentials. ${maxAttempts - failedAttempts} attempts remaining`;
+  };
+
+  return login;
+}
+
 module.exports = {
   calculateTax,
   convertToUpperCase,
   findMaximum,
   isPalindrome,
-  calculateDiscountedPrice
+  calculateDiscountedPrice,
+  createLoginTracker
 };
